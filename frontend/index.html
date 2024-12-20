@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>todo list</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+</head>
+
+<body>
+
+    <h1>Ma Todo List</h1>
+    <input type="text" id="task" placeholder="Ajouter une tâche">
+    <button onclick="addTask()">Ajouter</button>
+    <ul id="taskList"></ul>
+
+    <script>
+        async function addTask() {
+            const task = document.getElementById('task').value;
+            await fetch('http://localhost:3000/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ task })
+            });
+            location.reload();
+        }
+
+        async function getTasks() {
+            const response = await fetch('http://localhost:3000/tasks');
+            const tasks = await response.json();
+            const list = document.getElementById('taskList');
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.textContent = task;
+                list.appendChild(li);
+            });
+        }
+
+        getTasks();
+    </script>
+</body>
+
+</html>
